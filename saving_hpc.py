@@ -12,3 +12,6 @@ np.save(filename_gt, rv_es)
 to_format_img = nib.Nifti1Image(gt_single, np.eye(4))  
 to_format_img.set_data_dtype(np.uint8)
 to_format_img.to_filename(os.path.join(pre_apth,name[0]+'_'+str(i)+'_gt'+'.nii.gz'))
+
+
+ #plt.imsave('D:\\Greg\\Research\\Code\\abbas\\001\\001_Orig_sa' + str(i) + '.png', temp[i, :, :])
