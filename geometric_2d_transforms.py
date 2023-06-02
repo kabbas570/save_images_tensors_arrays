@@ -1,4 +1,3 @@
-        
 import SimpleITK as sitk
 import numpy as np
 from scipy.ndimage import distance_transform_edt as distance
@@ -127,9 +126,19 @@ temp_LA_ES = np.expand_dims(img, axis=0)
 
 
 transforms_geometric = tio.Compose({
-        tio.RandomFlip(axes=([1,2])): .3,  ## axis [0,1] or [1,2]
-        tio.RandomFlip(axes=([0,1])): .3,  ## axis [0,1] or [1,2]
-        tio.RandomAffine(degrees=(180,0,0)): 0.3, ## for 2D rotation 
+        #tio.RandomFlip(axes=([1,2])): .3,  ## axis [0,1] or [1,2]
+        #tio.RandomFlip(axes=([0,1])): .3,  ## axis [0,1] or [1,2]
+        tio.RandomAffine(degrees=(100,0,0)): 0.3, ## for 2D rotation 
+})
+
+
+transforms_all = tio.OneOf({
+        tio.RandomAffine(degrees=(100,0,0)): 0.1, ## for 2D rotation 
+        tio.RandomBiasField(): .1,  ## axis [0,1] or [1,2]
+        tio.RandomGhosting(axes=([1,2])): 0.1,
+        tio.RandomBlur(): 0.1,
+        tio.RandomGamma(): 0.1,   
+        tio.RandomNoise(mean=0.2,std=0.2):0.1,
 })
 
 
@@ -140,23 +149,24 @@ d['Mask'] = tio.Image(tensor = temp_LA_ES, type=tio.LABEL)
 sample = tio.Subject(d)
 
 
-if transforms_geometric is not None:
-    transformed_tensor = transforms_geometric(sample)
+if transforms_all is not None:
+    transformed_tensor = transforms_all(sample)
     img_LA_ES1 = transformed_tensor['Image'].data
     temp_LA_ES1 = transformed_tensor['Mask'].data
 
-plt.figure()
-plt.imshow(temp_LA_ES1[0,0,:])
 
-
-plt.figure()
-plt.imshow(temp_LA_ES[0,0,:])
-
-
-plt.figure()
-plt.imshow(img_LA_ES1[0,0,:])
 
 
 plt.figure()
 plt.imshow(img_LA_ES[0,0,:])
+
+plt.figure()
+plt.imshow(temp_LA_ES[0,0,:])
+
+plt.figure()
+plt.imshow(img_LA_ES1[0,0,:])
+
+plt.figure()
+plt.imshow(temp_LA_ES1[0,0,:])
+
 
