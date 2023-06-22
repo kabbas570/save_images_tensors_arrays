@@ -1,3 +1,5 @@
+img = data.astype(np.uint8)
+
 target_dir1  = '/data/scratch/acw676/Seg_A/vae_viz/'
 rv_es = out_LA_ES_RV[0,0,:].cpu().numpy()
 print(rv_es.shape)
